@@ -33,8 +33,9 @@ struct ContentView: View {
                             
                         }
                     } symbols: {
-                        yellowBall().tag(1)
-                        redBall(offset: dragOffset)
+                        ball()
+                            .tag(1)
+                        ball(offset: dragOffset)
                             .tag(2)
                     }
                 }
@@ -54,24 +55,19 @@ struct ContentView: View {
         }
     }
     
-    func yellowBall() -> some View {
+    
+    func ball(offset: CGSize = .zero) -> some View {
         Circle()
             .frame(width: 150, height: 150)
-    }
-    
-    func redBall(offset: CGSize = .zero) -> some View {
-        ZStack {
-            Circle()
-                .frame(width: 150, height: 150)
-                .offset(offset)
-        }
+            .offset(offset)
+        
     }
     
     func cloudIcon(offset: CGSize = .zero) -> some View {
         
         Image(systemName: "cloud.sun.rain.fill")
             .font(.system(size: 60))
-
+        
             .frame(width: 150, height: 150)
             .foregroundColor(.white)
             .offset(offset)
