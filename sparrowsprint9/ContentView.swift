@@ -8,17 +8,49 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var dragOffset: CGSize
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        
+        Canvas { context, size in
+            context.addFilter(.alphaThreshold(min: 0.5, color: .red))
+            context.addFilter(.blur(radius: 30))
+            
+            context.drawLayer { ctx in
+                for index in [1, 2] {
+                    
+                    if let resolvedView = context.resolveSymbol(id: index) {
+                        ctx.draw(resolvedView, at: CGPoint(x: size.width / 2, y: size.height / 2))
+                    }
+                    
+                }
+            }
+        }  symbols: {
+            yellowBall().tag(1)
+            redBall(offset: dragOffset).tag(2)
         }
-        .padding()
+        .gesture(DragGesture()
+            .onChanged { value in
+                dragOffset = value.translation
+            })
+    }
+    
+    func yellowBall() -> some View {
+        Circle()
+            .fill(.yellow)
+            .frame(width: 150, height: 150)
+    }
+    
+    func redBall(offset: CGSize = .zero) -> some View {
+        Circle()
+            .fill(.red)
+            .frame(width: 150, height: 150)
+            .offset(offset)
     }
 }
 
+
+
 #Preview {
-    ContentView()
+    ContentView(dragOffset: CGSize.zero)
 }
