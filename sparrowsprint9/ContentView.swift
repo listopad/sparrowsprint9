@@ -13,38 +13,36 @@ struct ContentView: View {
     
     
     var body: some View {
-        
         GeometryReader { proxy in
-            
             Rectangle()
                 .fill(.radialGradient(colors: [Color.yellow, Color.red],
                                       center: .center,
                                       startRadius: 60,
                                       endRadius: 120))
                 .mask {
-                    
                     Canvas { context, size in
                         context.addFilter(.alphaThreshold(min: 0.5))
                         context.addFilter(.blur(radius: 20))
                         
                         context.drawLayer { ctx in
                             for index in [1, 2] {
-                                
                                 if let resolvedView = context.resolveSymbol(id: index) {
-                                    
                                     ctx.draw(resolvedView, at: size / 2)
-                                    
                                 }
-                                
                             }
+                            
                         }
-                    }  symbols: {
+                    } symbols: {
                         yellowBall().tag(1)
                         redBall(offset: dragOffset)
                             .tag(2)
                     }
+                }
+                .overlay(
+                    cloudIcon(offset: dragOffset)
                     
-                } .gesture(DragGesture()
+                )
+                .gesture(DragGesture()
                     .onChanged { value in
                         dragOffset = value.translation
                     }
@@ -53,7 +51,6 @@ struct ContentView: View {
                             dragOffset = .zero
                         }
                     })
-            
         }
     }
     
@@ -70,11 +67,14 @@ struct ContentView: View {
         }
     }
     
-    func cloudIcon() -> some View {
+    func cloudIcon(offset: CGSize = .zero) -> some View {
         
         Image(systemName: "cloud.sun.rain.fill")
-            .font(.title)
+            .font(.system(size: 60))
+
+            .frame(width: 150, height: 150)
             .foregroundColor(.white)
+            .offset(offset)
         
     }
 }
