@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @State var dragOffset: CGSize = .zero
-    @State var gradientStartPosition: UnitPoint = .zero
     @State var canvasCenter: CGPoint = .zero
     
     
@@ -18,7 +17,10 @@ struct ContentView: View {
         GeometryReader { proxy in
             
             Rectangle()
-                .fill(.radialGradient(colors: [Color.yellow, Color.red], center: .center, startRadius: 60, endRadius: 120))
+                .fill(.radialGradient(colors: [Color.yellow, Color.red],
+                                      center: .center,
+                                      startRadius: 60,
+                                      endRadius: 120))
                 .mask {
                     
                     Canvas { context, size in
@@ -29,12 +31,9 @@ struct ContentView: View {
                             for index in [1, 2] {
                                 
                                 if let resolvedView = context.resolveSymbol(id: index) {
-                                    let drawPosition = CGPoint(x: size.width / 2,
-                                                               y: size.height / 2)
-                                    ctx.draw(resolvedView, at: drawPosition)
-                                    if (index == 2) {
-                                        canvasCenter = drawPosition
-                                    }
+                                    
+                                    ctx.draw(resolvedView, at: size / 2)
+                                    
                                 }
                                 
                             }
@@ -65,13 +64,9 @@ struct ContentView: View {
     
     func redBall(offset: CGSize = .zero) -> some View {
         ZStack {
-            
-            
             Circle()
                 .frame(width: 150, height: 150)
                 .offset(offset)
-            
-            
         }
     }
     
@@ -84,8 +79,14 @@ struct ContentView: View {
     }
 }
 
+extension CGSize {
+    static func / (size: CGSize, divisor: Int) -> CGPoint {
+        return CGPoint(x: size.width / CGFloat(divisor), y: size.height / CGFloat(divisor))
+    }
+}
+
 
 
 #Preview {
-    ContentView(dragOffset: CGSize.zero, gradientStartPosition: .zero)
+    ContentView(dragOffset: CGSize.zero)
 }

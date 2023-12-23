@@ -11,7 +11,7 @@ import SwiftUI
 struct sparrowsprint9App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(dragOffset: .zero, gradientStartPosition: .zero)
+            ContentView(dragOffset: .zero)
         }
     }
 }
