@@ -32,6 +32,11 @@ struct ContentView: View {
         .gesture(DragGesture()
             .onChanged { value in
                 dragOffset = value.translation
+            }
+            .onEnded { _ in
+                withAnimation {
+                    dragOffset = .zero
+                }
             })
     }
     
